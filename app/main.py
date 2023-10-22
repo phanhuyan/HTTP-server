@@ -1,6 +1,8 @@
 # Uncomment this to pass the first stage
 import socket
 import threading
+import os
+directory = "/mnt/e/wsl/codecrafters-http-server-python"
 def parse_http_request(data):
     request_lines = data.split('\r\n')
     start_line = request_lines[0]
@@ -27,6 +29,20 @@ def handle_client(conn):
     # Check if the path is '/'
     if path == "/":
         response = "HTTP/1.1 200 OK\r\n\r\n"
+    elif path.startswith('/files/'):
+        filename = path[7:]
+        file_path = os.path.join(directory, filename)
+        if os.path.isfile(file_path):
+            with open(file_path, 'rb') as file:
+                file_contents = file.read()
+                response = "HTTP/1.1 200 OK\r\n"
+                response += "Content-Type: application/octet-stream\r\n"
+                response += f"Content-Length: {len(file_contents)}\r\n\r\n"
+                response = response.encode() + file_contents
+                conn.sendall(response)
+        else:
+            response = "HTTP/1.1 404 Not Found\r\n\r\n"
+            conn.sendall(response.encode())
     elif path == '/user-agent':
         user_agent = headers.get('User-Agent', 'Unknown User-Agent')
         response = f"HTTP/1.1 200 OK\r\n"
