@@ -9,9 +9,28 @@ def main():
     # Uncomment this to pass the first stage
     #
     server_socket = socket.create_server(("localhost", 4221), reuse_port=True)
-    conn, addr = server_socket.accept()  # wait for client
-    with conn:
-        conn.sendall(b"HTTP/1.1 200 OK\r\n\r\n")
+    while True:
+        conn, addr = server_socket.accept()
+        with conn:
+            data = conn.recv(1024).decode('utf-8')  # Receive and decode the request data
+            if not data:
+                continue  # If no data is received, continue to the next iteration
+
+            # Split the request into lines and get the first line (start line)
+            request_lines = data.split('\r\n')
+            start_line = request_lines[0]
+
+            # Extract the path from the start line
+            _, path, _ = start_line.split(' ')
+
+            # Check if the path is '/'
+            if path == '/':
+                response = "HTTP/1.1 200 OK\r\n\r\n"
+            else:
+                response = "HTTP/1.1 404 Not Found\r\n\r\n"
+
+            # Send the response back to the client
+            conn.sendall(response.encode('utf-8'))
 
 if __name__ == "__main__":
     main()
