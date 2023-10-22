@@ -24,8 +24,12 @@ def main():
             _, path, _ = start_line.split(' ')
 
             # Check if the path is '/'
-            if path == '/':
-                response = "HTTP/1.1 200 OK\r\n\r\n"
+            if path.startswith('/echo/'):
+                random_string = path[6:]  # Extract the random string
+                response = "HTTP/1.1 200 OK\r\n"
+                response += "Content-Type: text/plain\r\n"
+                response += f"Content-Length: {len(random_string)}\r\n\r\n"
+                response += random_string
             else:
                 response = "HTTP/1.1 404 Not Found\r\n\r\n"
 
