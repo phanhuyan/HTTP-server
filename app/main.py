@@ -2,7 +2,7 @@
 import socket
 import threading
 import os
-directory = "/mnt/e/wsl/codecrafters-http-server-python"
+import sys
 def parse_http_request(data):
     request_lines = data.split('\r\n')
     start_line = request_lines[0]
@@ -31,6 +31,7 @@ def handle_client(conn):
         response = "HTTP/1.1 200 OK\r\n\r\n"
     elif path.startswith('/files/'):
         filename = path[7:]
+        directory = sys.argv[-1]
         file_path = os.path.join(directory, filename)
         if os.path.isfile(file_path):
             with open(file_path, 'rb') as file:
@@ -38,8 +39,8 @@ def handle_client(conn):
                 response = "HTTP/1.1 200 OK\r\n"
                 response += "Content-Type: application/octet-stream\r\n"
                 response += f"Content-Length: {len(file_contents)}\r\n\r\n"
-                response = response.encode() + file_contents
-                conn.sendall(response)
+                response = response + file_contents
+                conn.sendall(response.encode())
         else:
             response = "HTTP/1.1 404 Not Found\r\n\r\n"
             conn.sendall(response.encode())
