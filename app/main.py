@@ -35,10 +35,9 @@ def handle_client(conn):
         response = "HTTP/1.1 200 OK\r\n\r\n"
     elif method == "POST" and path.startswith('/files/'):
         filename = path[7:]
-        directory = sys[-1]
-        request_body = data.split("\r\n")[-1]
-        file_path = os.path.join(directory, filename)
+        directory = sys.argv[-1]
         content = data.split("\r\n")[-1]
+        file_path = os.path.join(directory, filename)
         with open(file_path, 'wb') as file:
             file.write(content)
 
