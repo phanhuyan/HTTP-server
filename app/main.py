@@ -15,6 +15,7 @@ def parse_http_request(data):
         if line.strip():
             if len(line.split(': ', 1)) != 2:
                 continue
+            print(line)
             key, value = line.split(': ', 1)
             headers[key] = value
     
