@@ -14,6 +14,7 @@ def parse_http_request(data):
     for line in request_lines[1:]:
         if line.strip():
             key, value = line.split(': ', 1)
+            print(line)
             headers[key] = value
     
     return method, path, protocol, headers
