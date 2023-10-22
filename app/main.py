@@ -43,7 +43,6 @@ def handle_client(conn):
                 response = response.encode() + file_contents
         else:
             response = "HTTP/1.1 404 Not Found\r\n\r\n"
-            conn.sendall(response.encode())
     elif path == '/user-agent':
         user_agent = headers.get('User-Agent', 'Unknown User-Agent')
         response = f"HTTP/1.1 200 OK\r\n"
