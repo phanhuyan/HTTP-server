@@ -39,8 +39,8 @@ def handle_client(conn):
                 response = "HTTP/1.1 200 OK\r\n"
                 response += "Content-Type: application/octet-stream\r\n"
                 response += f"Content-Length: {len(file_contents)}\r\n\r\n"
-                response = response + file_contents
-                conn.sendall(response.encode())
+                response = response.encode() + file_contents
+                conn.sendall(response)
         else:
             response = "HTTP/1.1 404 Not Found\r\n\r\n"
             conn.sendall(response.encode())
