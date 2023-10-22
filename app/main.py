@@ -38,9 +38,9 @@ def handle_client(conn):
         directory = sys.argv[-1]
         content = data.split("\r\n")[-1]
         file_path = os.path.join(directory, filename)
-        with open(file_path, 'wb') as file:
+        with open(file_path, 'w') as file:
             file.write(content)
-
+        response = "HTTP/1.1 201 Created\r\n\r\n"
 
     elif method == "GET" and path.startswith('/files/'):
         filename = path[7:]
