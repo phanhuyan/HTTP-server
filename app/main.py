@@ -33,6 +33,7 @@ def handle_client(conn):
         filename = path[7:]
         directory = sys.argv[-1]
         file_path = os.path.join(directory, filename)
+        print(directory)
         if os.path.isfile(file_path):
             with open(file_path, 'rb') as file:
                 file_contents = file.read()
@@ -40,7 +41,6 @@ def handle_client(conn):
                 response += "Content-Type: application/octet-stream\r\n"
                 response += f"Content-Length: {len(file_contents)}\r\n\r\n"
                 response = response.encode() + file_contents
-                conn.sendall(response)
         else:
             response = "HTTP/1.1 404 Not Found\r\n\r\n"
             conn.sendall(response.encode())
