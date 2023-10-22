@@ -27,9 +27,20 @@ def handle_client(conn):
     # Extract the path from the start line
     method, path, protocol, headers = parse_http_request(data)
     # Check if the path is '/'
+    
     if path == "/":
         response = "HTTP/1.1 200 OK\r\n\r\n"
-    elif path.startswith('/files/'):
+    elif method == "POST" and path.startswith('/files/'):
+        filename = path[7:]
+        directory = sys[-1]
+        request_body = data.split("\r\n")[-1]
+        file_path = os.path.join(directory, filename)
+        content = data.split("\r\n")[-1]
+        with open(file_path, 'wb') as file:
+            file.write(content)
+
+
+    elif method == "GET" and path.startswith('/files/'):
         filename = path[7:]
         directory = sys.argv[-1]
         file_path = os.path.join(directory, filename)
