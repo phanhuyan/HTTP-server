@@ -9,7 +9,6 @@ def main():
     # Uncomment this to pass the first stage
     #
     server_socket = socket.create_server(("localhost", 4221), reuse_port=True)
-    server_socket.accept() # wait for client
     server_socket.listen(MAX_CONNECTIONS)
     while True:
         client_socket, client_address = server_socket.accept()
