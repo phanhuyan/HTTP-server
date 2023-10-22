@@ -43,23 +43,24 @@ def handle_client(conn):
                 response = response.encode() + file_contents
         else:
             response = "HTTP/1.1 404 Not Found\r\n\r\n"
+            response = response.encode()
     elif path == '/user-agent':
         user_agent = headers.get('User-Agent', 'Unknown User-Agent')
         response = f"HTTP/1.1 200 OK\r\n"
         response += "Content-Type: text/plain\r\n"
         response += f"Content-Length: {len(user_agent)}\r\n\r\n"
         response += user_agent
-        response.encode('utf-8')
+        response = response.encode('utf-8')
     elif path.startswith('/echo/'):
         random_string = path[6:]  # Extract the random string
         response = "HTTP/1.1 200 OK\r\n"
         response += "Content-Type: text/plain\r\n"
         response += f"Content-Length: {len(random_string)}\r\n\r\n"
         response += random_string
-        response.encode('utf-8')
+        response = response.encode('utf-8')
     else:
         response = "HTTP/1.1 404 Not Found\r\n\r\n"
-        response.encode('utf-8')
+        response = response.encode('utf-8')
 
     # Send the response back to the client
     conn.sendall(response)
