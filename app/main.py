@@ -52,6 +52,8 @@ def handle_client(conn):
                 response += f"Content-Length: {len(file_contents)}\r\n\r\n"
                 response = response.encode() + file_contents
                 conn.sendall(response)
+                conn.close()
+                return
         else:
             response = "HTTP/1.1 404 Not Found\r\n\r\n"
 
