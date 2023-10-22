@@ -40,6 +40,7 @@ def handle_client(conn):
                 response += "Content-Type: application/octet-stream\r\n"
                 response += f"Content-Length: {len(file_contents)}\r\n\r\n"
                 response = response.encode() + file_contents
+                conn.sendall(response)
         else:
             response = "HTTP/1.1 404 Not Found\r\n\r\n"
             conn.sendall(response.encode())
@@ -49,17 +50,19 @@ def handle_client(conn):
         response += "Content-Type: text/plain\r\n"
         response += f"Content-Length: {len(user_agent)}\r\n\r\n"
         response += user_agent
+        conn.sendall(response.encode('utf-8'))
     elif path.startswith('/echo/'):
         random_string = path[6:]  # Extract the random string
         response = "HTTP/1.1 200 OK\r\n"
         response += "Content-Type: text/plain\r\n"
         response += f"Content-Length: {len(random_string)}\r\n\r\n"
         response += random_string
+        conn.sendall(response.encode('utf-8'))
     else:
         response = "HTTP/1.1 404 Not Found\r\n\r\n"
+        conn.sendall(response.encode('utf-8'))
 
     # Send the response back to the client
-    conn.sendall(response.encode('utf-8'))
     conn.close()
 
 def main():
